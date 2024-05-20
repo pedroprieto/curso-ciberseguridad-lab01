@@ -1,0 +1,46 @@
+* LAB 01: Seguridad perimetral con Next Generation Firewall
+Solución de Pedro Prieto Alarcón
+
+* Instalación del entorno en AWS
+** Creación de la VPC y las subredes
+Creamos una Red Privada Virtual (VPC) con dos subredes: una pública y una privada.
+[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/vpc1.png]]
+[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/vpc2.png]]
+
+- La subred pública tendrá acceso a Internet a través de un Internet Gateway.
+- La subred privada no tiene acceso a Internet: solo acceso a la red local.
+
+** Creación de puntos de conexión a Systems Manager en la subred privada
+Dado que la subred privada no tiene conexión a Internet, no será posible conectarse remotamente a las instancias creadas en dicha subred. Para solucionarlo, creamos los puntos de acceso (VPC endpoints) para poder conectarnos a través de Systems Manager (fuente: https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-setting-up-ec2.html).
+
+En primer lugar, creamos un grupo de seguridad (firewall) para permitir conexiones entrantes de SSM a los puntos de acceso. Debemos permitir el acceso a través del puerto 443 al tráfico procedente de la subred privada:
+[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/sg-ssm.png]]
+
+En segundo lugar, creamos los puntos de acceso (VPC Endpoints). Debemos crear tres interfaces, indicando la VPC, subred privada y grupo de seguridad:
+- ssm
+- ssmmessages
+- ec2messages
+
+[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/endpointssm1.png]]  
+[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/endpointssm2.png]]
+
+Repitiendo la operación con los otros dos servicios, tenemos 3 endpoints disponibles:
+[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/endpoints3.png]]
+
+** Lanzamiento de la instancia cliente en la subred privada
+Lanzamos una instancia Ubuntu en la subred privada. Permitimos tráfico ICMP entrante desde la subred pública para comprobar conectividad:
+[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/cliente-1.png]]
+
+[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/cliente-2.png]]
+
+[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/cliente-3.png]]
+
+Adicionalmente, asignamos un perfil de instancia para permitir el acceso a SSM:
+[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/instanceprofilecliente.png]]
+[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/instanceprofilecliente2.png]]
+
+Comprobamos que nos podemos conectar a la instancia a través de SSM:
+[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/connectcliente.png]]
+
+Comprobamos que la máquina no tiene acceso a Internet (red privada):
+[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/connectcliente2.png]]
