@@ -102,48 +102,67 @@ Comprobamos por fin que el cliente puede navegar a través de OPNsense:
 Como diferencia con respecto a hacerlo en VirtualBox/VMWare, he desactivado el servidor DHCP, ya que es proporcionado por la VPC de AWS.
 
 ** Búsqueda por DNS
-[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/endpoints3.png]]
+[[./imagenes/endpoints3.png]]
 
 ** Regla MARCA_COM
 Regla creada:
-[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/reglamarca1.png]]
+[[./imagenes/reglamarca1.png]]
 
 El cliente sigue navegando:
-[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/reglamarca2.png]]
+[[./imagenes/reglamarca2.png]]
 
 Como indica el enunciado, la regla se aplica después de la regla por defecto, por lo que no llega a ejecutarse. Tras cambiar el orden:
 
-[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/reglamarca3.png]]
+[[./imagenes/reglamarca3.png]]
 
 Vemos que efectivamente no funciona la navegación, aunque sí el ping:
-[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/reglamarca4.png]]
+[[./imagenes/reglamarca4.png]]
 
 ** Política restrictiva
 Desactivación de reglas:
-[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/restrictiva1.png]]
+[[./imagenes/restrictiva1.png]]
 
 No funciona el acceso a Internet:
-[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/restrictiva2.png]]
+[[./imagenes/restrictiva2.png]]
 
 Permitir HTTP/HTTPS e ICMP:
-[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/restrictiva3.png]]
+[[./imagenes/restrictiva3.png]]
 
-[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/restrictiva4.png]]
+[[./imagenes/restrictiva4.png]]
 
 En este caso *SÍ que funciona* el DNS, ya que la máquina cliente está configurada para resolver DNS en la infraestructura de AWS. Para hacer esta parte de la práctica, cambiamos la configuración DNS en el equipo cliente:
 
-[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/restrictiva5.png]]
+[[./imagenes/restrictiva5.png]]
 
 Comprobamos entonces que no hay resolución DNS:
-[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/restrictiva6.png]]
+[[./imagenes/restrictiva6.png]]
 
 Añadimos la regla DNS. El estado actual del cortafuegos es:
-[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/restrictiva7.png]]
+[[./imagenes/restrictiva7.png]]
 
 Y el resultado de la navegación a los distintos servicios:
-[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/restrictiva8.png]]
+[[./imagenes/restrictiva8.png]]
 
 Es recomendable abrir TCP para DNS por si el tamaño de las respuestas es mayor que el estándar, caso de DNSSEC.
 
 ** Intercepción HTTP y HTTPS
+Es más recomendable filtrar por DNS que por IP, ya que un sitio puede utilizar IPs dinámicas, cambiar de IP o utilizar diferentes IPs. Además, tal como indica el enunciado, es posible que las IPs soporten diferentes hostings compartidos.
 
+Todavía no es posible acceder a ~marca.com~ ni a ~marcacoches.com~:
+[[./imagenes/intercepcion1.png]]
+
+Al desactivar la regla ya funciona la navegación:
+[[./imagenes/intercepcion2.png]]
+
+A continuación, configuro el proxy squid. Para ello, instalo la extensión y configuro las reglas NAT. Lo que más me ha costado ha sido descubrir que había que poner los puertos 80 y 443 como "Puerto de destino TCP permitido". No lo he visto en la documentación...
+
+[[./imagenes/intercepcion3.png]]
+
+He creado un certificado CA y lo he importado en la máquina cliente:
+[[./imagenes/intercepcion4.png]]
+
+A continuación, he puesto la lista negra y he comprobado la navegación:
+[[./imagenes/intercepcion5.png]]
+
+Aquí puede verse cómo se deniega el acceso a ~marcacoches.com~:
+[[./imagenes/intercepcion6.png]]
