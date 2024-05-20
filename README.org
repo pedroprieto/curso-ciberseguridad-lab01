@@ -1,3 +1,19 @@
+#+TITLE: Seguridad perimetral con Next Generation Firewall
+#+AUTHOR: Pedro Prieto Alarcón
+#+LANGUAGE: es-es
+#+DATE: 20/05/2024
+#+LATEX_HEADER: \usepackage[spanish]{babel} \usepackage{sectsty} \usepackage{times} \allsectionsfont{\sffamily} 
+#+LATEX_HEADER: \usepackage{fancyhdr} \pagestyle{fancy} \fancyhf{}
+#+LATEX_HEADER: \newcommand{\fuenteencpie}{\fontfamily{phv}\fontsize{9}{11}\selectfont}
+#+LATEX_HEADER: \rhead{\fuenteencpie \leftmark}
+#+LATEX_HEADER: \renewcommand{\footrulewidth}{0.5pt}
+#+LATEX_HEADER: \rfoot{\fuenteencpie \thepage}
+#+LATEX_HEADER: \cfoot{\fuenteencpie Pedro Prieto Alarcón}
+#+LATEX_HEADER: \lfoot{\fuenteencpie 2024}
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper,12pt]
+
+
 * LAB 01: Seguridad perimetral con Next Generation Firewall
 Solución de Pedro Prieto Alarcón
 
@@ -101,6 +117,7 @@ Comprobamos por fin que el cliente puede navegar a través de OPNsense:
 
 Como diferencia con respecto a hacerlo en VirtualBox/VMWare, he desactivado el servidor DHCP, ya que es proporcionado por la VPC de AWS.
 
+* Desarrollo de la práctica
 ** Búsqueda por DNS
 [[./imagenes/endpoints3.png]]
 
@@ -166,3 +183,48 @@ A continuación, he puesto la lista negra y he comprobado la navegación:
 
 Aquí puede verse cómo se deniega el acceso a ~marcacoches.com~:
 [[./imagenes/intercepcion6.png]]
+
+** IDS, IPS
+En primer lugar, descargamos las reglas del IDS y reiniciamos el servicio:
+[[./imagenes/ids1.png]]
+
+A continuación, lanzamos el primer comando:
+[[./imagenes/ids2.png]]
+
+Resultado:
+[[./imagenes/ids3.png]]
+
+Segundo comando:
+[[./imagenes/ids4.png]]
+
+Resultado:
+[[./imagenes/ids5.png]]
+
+El comando intenta ejecutar un código malicioso en el servidor a través de JNDI y LDAP.
+
+Vemos cómo nos deja descargar EICAR:
+[[./imagenes/ids6.png]]
+
+Si activamos el IPS, bloquea la petición:
+[[./imagenes/ids7.png]]
+
+[[./imagenes/ids8.png]]
+
+** Bloqueo de amenazas en conexiones cifradas e inspección HTTPS
+Sin embargo, si descargamos a través de HTTPS no lo bloquea:
+[[./imagenes/ids9.png]]
+
+Para solucionarlo, instalamos ClamAV y ICAP en los plugins. Instalamos las firmas de ClamAV y configuramos ICAP:
+
+Registro de ICAP con la detección del virus:
+[[./imagenes/ids10.png]]
+
+En el log del proxy solo he encontrado este mensaje:
+[[./imagenes/ids11.png]]
+
+* Conclusiones
+Práctica muy interesante. Me ha gustado hacerla en AWS, ya que me ha permitido trabajar con una infraestructura con cierta complejidad.
+
+Dentro del mundo cloud, quizá sería más interesante haber utilizado instancias NAT o un [[https://docs.aws.amazon.com/network-firewall/latest/developerguide/what-is-aws-network-firewall.html][Network Firewall]].
+
+Con respecto a OPNsense, ha funcionado relativamente bien, aunque es bastante "sensible": en ocasiones he tenido que reiniciar los servicios (sobre todo en el último apartado), cambiar su orden de arranque e incluso reiniciar la máquina.
