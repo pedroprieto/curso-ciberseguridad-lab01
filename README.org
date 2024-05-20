@@ -44,3 +44,58 @@ Comprobamos que nos podemos conectar a la instancia a través de SSM:
 
 Comprobamos que la máquina no tiene acceso a Internet (red privada):
 [[./imagenes/connectcliente2.png]]
+
+** Lanzamiento de la instancia de OPNsense
+Lanzamos uns instancia OPNSense a través de AWS Marketplace. Elegimos la subred pública y asignamos un grupo de seguridad para permitir el acceso remoto por HTTPS y SSH:
+[[./imagenes/opnsense1.png]]
+[[./imagenes/opnsense2.png]]
+[[./imagenes/opnsense3.png]]
+[[./imagenes/opnsense4.png]]
+
+Asignamos una IP pública al interfaz de red, dado que se nos olvidó en el paso anterior:
+[[./imagenes/opnsense4.png]]
+[[./imagenes/opnsense6.png]]
+
+Comprobamos que podemos acceder a través de la IP pública asignada:
+[[./imagenes/opnsense7.png]]
+[[./imagenes/opnsense8.png]]
+
+Obtenemos el usuario y la contraseña iniciales de los logs de la instancia:
+[[./imagenes/opnsense9.png]]
+[[./imagenes/opnsense10.png]]
+
+Y finalmente comprobamos que funciona:
+[[./imagenes/opnsense11.png]]
+
+** Configuración de la segunda interfaz de red en OPNsense
+A continuación, asignamos una nueva interfaz de red a la instancia de OPNsense y la conectamos a la subred privada. En primer lugar, creamos un grupo de seguridad para permitir el tráfico entrante desde la máquina cliente:
+[[./imagenes/opnsense12.png]]
+
+En segundo lugar, creamos la interfaz de red y le asignamos la IP estática 192.168.56.100 y el grupo de seguridad creado en el paso anterior:
+[[./imagenes/opnsense13.png]]
+
+Asignamos la interfaz a la instancia OPNsense:
+[[./imagenes/opnsense14.png]]
+[[./imagenes/opnsense15.png]]
+
+Ya tenemos la instancia OPNsense con dos interfaces de red. Para que todo funcione, en primer lugar hay que desactivar la comprobación de origen/destino de paquetes para que la máquina pueda actuar como router:
+[[./imagenes/opnsense16.png]]
+[[./imagenes/opnsense17.png]]
+
+A continuación, configuramos la tabla de enrutamiento de la subred privada para que el tráfico por defecto se dirija a la IP 192.168.56.100, la IP interna de OPNsense:
+[[./imagenes/opnsense18.png]]
+[[./imagenes/opnsense19.png]]
+
+Por último, configuramos OPN sense mediante el asistente:
+[[./imagenes/opnsense20.png]]
+[[./imagenes/opnsense21.png]]
+[[./imagenes/opnsense22.png]]
+[[./imagenes/opnsense23.png]]
+
+Y añadimos la regla de permitir tráfico de la LAN:
+[[./imagenes/opnsense24.png]]
+
+Comprobamos por fin que el cliente puede navegar a través de OPNsense:
+[[./imagenes/opnsense25.png]]
+[[./imagenes/opnsense26.png]]
+
