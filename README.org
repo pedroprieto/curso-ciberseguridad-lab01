@@ -17,7 +17,9 @@
 * LAB 01: Seguridad perimetral con Next Generation Firewall
 Solución de Pedro Prieto Alarcón
 
-También disponible aquí: https://github.com/pedroprieto/curso-ciberseguridad-lab01
+También disponible aquí:
+
+https://github.com/pedroprieto/curso-ciberseguridad-lab01
 
 * Instalación del entorno en AWS
 ** Creación de la VPC y las subredes
