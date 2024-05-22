@@ -47,11 +47,11 @@ Con la segunda regla se generan *2* alertas.
 
 
 * Activación de reglas
-[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/alertas1.png]]
+[[./imagenes/alertas1.png]]
 
 * Creación de casos
 Se han generado las siguientes alertas:
-[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/casos1.png]]
+[[./imagenes/casos1.png]]
 
 Parece que se ha descargado un ejecutable potencialmente malicioso de un servidor Wordpress.
 
@@ -62,15 +62,15 @@ Host: ~aminsanat.com~
 Fichero: ~/wp-content/plugins/tech/LO-06.exe~
 
 De las tres consultas, se ha detectado como maliciosa la relacionada con ~tinyurl.com~:
-[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/casos2.png]]
+[[./imagenes/casos2.png]]
 
-[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/casos3.png]]
+[[./imagenes/casos3.png]]
 
 * Extracción de un ejecutable a través de un PCAP
 Comienzo y fin de la descarga:
-[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/pcap1.png]]
+[[./imagenes/pcap1.png]]
 
 Comienza a las 21:22:24 y acaba a las 21:22:25
 
 Fichero descargado con Wireshark:
-[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/pcap2.png]]
+[[./imagenes/pcap2.png]]
