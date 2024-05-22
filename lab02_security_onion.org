@@ -1,0 +1,76 @@
+#+TITLE: Análisis de paquetes con Security Onion
+#+AUTHOR: Pedro Prieto Alarcón
+#+LANGUAGE: es-es
+#+DATE: 22/05/2024
+#+LATEX_HEADER: \usepackage[spanish]{babel} \usepackage{sectsty} \usepackage{times} \allsectionsfont{\sffamily} 
+#+LATEX_HEADER: \usepackage{fancyhdr} \pagestyle{fancy} \fancyhf{}
+#+LATEX_HEADER: \newcommand{\fuenteencpie}{\fontfamily{phv}\fontsize{9}{11}\selectfont}
+#+LATEX_HEADER: \rhead{\fuenteencpie \leftmark}
+#+LATEX_HEADER: \renewcommand{\footrulewidth}{0.5pt}
+#+LATEX_HEADER: \rfoot{\fuenteencpie \thepage}
+#+LATEX_HEADER: \cfoot{\fuenteencpie Pedro Prieto Alarcón}
+#+LATEX_HEADER: \lfoot{\fuenteencpie 2024}
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper,12pt]
+
+
+* LAB 02: Análisis de paquetes con Security Onion
+Solución de Pedro Prieto Alarcón
+
+También disponible aquí:
+
+https://github.com/pedroprieto/curso-ciberseguridad-lab01/lab02_security_onion.org
+
+* Actualización reglas del firewall
+Después de la instalación es necesario añadir la regla del firewall correspondiente para poder conectarse a través del interfaz web:
+
+#+begin_src bash
+  so-firewall includehost manager 192.168.18.0/24
+  so-firewall apply
+#+end_src
+
+* Importación de pcaps
+Se han producido *1234* eventos.
+
+La IP involucrada es la ~192.168.14.103~.
+
+Los dominios consultados son del tipo:
+#+begin_src
+a78201c0dca21bd0c82e0d0a5573756172696f7320202020202020202020202.020202020202020202020202020202020202020202020202020204c6f732075.73756172696f73206e6f2070756564656e2068616365722063616d62696f732.06163636964656e74616c2e2e2e.cyberops.com.dccore200.local
+#+end_src
+
+No parecen consultas legibles. Tal como indica el enunciado, está codificado en hexadecimal.
+
+Con un tamaño de *300*, se generan *20* alertas.
+
+Con la segunda regla se generan *2* alertas.
+
+
+* Activación de reglas
+[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/alertas1.png]]
+
+* Creación de casos
+Se han generado las siguientes alertas:
+[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/casos1.png]]
+
+Parece que se ha descargado un ejecutable potencialmente malicioso de un servidor Wordpress.
+
+Se conecta al a IP ~217.160.0.242~.
+
+Host: ~aminsanat.com~
+
+Fichero: ~/wp-content/plugins/tech/LO-06.exe~
+
+De las tres consultas, se ha detectado como maliciosa la relacionada con ~tinyurl.com~:
+[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/casos2.png]]
+
+[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/casos3.png]]
+
+* Extracción de un ejecutable a través de un PCAP
+Comienzo y fin de la descarga:
+[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/pcap1.png]]
+
+Comienza a las 21:22:24 y acaba a las 21:22:25
+
+Fichero descargado con Wireshark:
+[[/home/pericon/codigo/curso-ciberseguridad-lab01/imagenes/pcap2.png]]
