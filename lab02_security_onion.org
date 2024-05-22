@@ -19,7 +19,7 @@ Solución de Pedro Prieto Alarcón
 
 También disponible aquí:
 
-https://github.com/pedroprieto/curso-ciberseguridad-lab01/lab02_security_onion.org
+https://github.com/pedroprieto/curso-ciberseguridad-lab01/blob/master/lab02_security_onion.org
 
 * Actualización reglas del firewall
 Después de la instalación es necesario añadir la regla del firewall correspondiente para poder conectarse a través del interfaz web:
